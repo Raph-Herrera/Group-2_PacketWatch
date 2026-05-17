@@ -32,12 +32,14 @@
             this.btnLogout = new System.Windows.Forms.Button();
             this.lblAppName = new System.Windows.Forms.Label();
             this.pnlHeader = new System.Windows.Forms.Panel();
+            this.btnNavActivityLog = new System.Windows.Forms.Button();
             this.btnNavUserMgmt = new System.Windows.Forms.Button();
             this.btnNavDashboard = new System.Windows.Forms.Button();
             this.btnNavPacketLogs = new System.Windows.Forms.Button();
             this.btnNavAlerts = new System.Windows.Forms.Button();
             this.lblDashboardTitle = new System.Windows.Forms.Label();
             this.pnlStatsRow = new System.Windows.Forms.Panel();
+            this.btnToggleCapture = new System.Windows.Forms.Button();
             this.btnRefreshStats = new System.Windows.Forms.Button();
             this.lblAlertsValue = new System.Windows.Forms.Label();
             this.lblAlerts = new System.Windows.Forms.Label();
@@ -93,6 +95,7 @@
             // pnlHeader
             // 
             this.pnlHeader.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.pnlHeader.Controls.Add(this.btnNavActivityLog);
             this.pnlHeader.Controls.Add(this.btnNavUserMgmt);
             this.pnlHeader.Controls.Add(this.btnNavDashboard);
             this.pnlHeader.Controls.Add(this.btnNavPacketLogs);
@@ -103,6 +106,17 @@
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(884, 40);
             this.pnlHeader.TabIndex = 6;
+            // 
+            // btnNavActivityLog
+            // 
+            this.btnNavActivityLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNavActivityLog.Location = new System.Drawing.Point(673, 6);
+            this.btnNavActivityLog.Name = "btnNavActivityLog";
+            this.btnNavActivityLog.Size = new System.Drawing.Size(35, 30);
+            this.btnNavActivityLog.TabIndex = 7;
+            this.btnNavActivityLog.Text = "📋";
+            this.btnNavActivityLog.UseVisualStyleBackColor = true;
+            this.btnNavActivityLog.Click += new System.EventHandler(this.btnNavActivityLog_Click);
             // 
             // btnNavUserMgmt
             // 
@@ -160,6 +174,7 @@
             // 
             // pnlStatsRow
             // 
+            this.pnlStatsRow.Controls.Add(this.btnToggleCapture);
             this.pnlStatsRow.Controls.Add(this.btnRefreshStats);
             this.pnlStatsRow.Controls.Add(this.lblAlertsValue);
             this.pnlStatsRow.Controls.Add(this.lblAlerts);
@@ -172,6 +187,16 @@
             this.pnlStatsRow.Name = "pnlStatsRow";
             this.pnlStatsRow.Size = new System.Drawing.Size(884, 40);
             this.pnlStatsRow.TabIndex = 7;
+            // 
+            // btnToggleCapture
+            // 
+            this.btnToggleCapture.Location = new System.Drawing.Point(712, 8);
+            this.btnToggleCapture.Name = "btnToggleCapture";
+            this.btnToggleCapture.Size = new System.Drawing.Size(78, 23);
+            this.btnToggleCapture.TabIndex = 8;
+            this.btnToggleCapture.Text = "Start Capture";
+            this.btnToggleCapture.UseVisualStyleBackColor = true;
+            this.btnToggleCapture.Click += new System.EventHandler(this.btnToggleCapture_Click);
             // 
             // btnRefreshStats
             // 
@@ -259,36 +284,42 @@
             // 
             // colTimestamp
             // 
+            this.colTimestamp.DataPropertyName = "timestamp";
             this.colTimestamp.HeaderText = "Timestamp";
             this.colTimestamp.Name = "colTimestamp";
             this.colTimestamp.ReadOnly = true;
             // 
             // colSourceIP
             // 
+            this.colSourceIP.DataPropertyName = "source_ip";
             this.colSourceIP.HeaderText = "Source IP";
             this.colSourceIP.Name = "colSourceIP";
             this.colSourceIP.ReadOnly = true;
             // 
             // colDestIP
             // 
+            this.colDestIP.DataPropertyName = "destination_ip";
             this.colDestIP.HeaderText = "Destination IP";
             this.colDestIP.Name = "colDestIP";
             this.colDestIP.ReadOnly = true;
             // 
             // colProtocol
             // 
+            this.colProtocol.DataPropertyName = "protocol";
             this.colProtocol.HeaderText = "Protocol";
             this.colProtocol.Name = "colProtocol";
             this.colProtocol.ReadOnly = true;
             // 
             // colPort
             // 
+            this.colPort.DataPropertyName = "port";
             this.colPort.HeaderText = "Port";
             this.colPort.Name = "colPort";
             this.colPort.ReadOnly = true;
             // 
             // colStatus
             // 
+            this.colStatus.DataPropertyName = "status";
             this.colStatus.HeaderText = "Status";
             this.colStatus.Name = "colStatus";
             this.colStatus.ReadOnly = true;
@@ -339,6 +370,8 @@
         private System.Windows.Forms.Label lblTotalValue;
         private System.Windows.Forms.Label lblTotalPackets;
         private System.Windows.Forms.DataGridView dgvDashboard;
+        private System.Windows.Forms.Button btnToggleCapture;
+        private System.Windows.Forms.Button btnNavActivityLog;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTimestamp;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSourceIP;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDestIP;

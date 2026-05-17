@@ -7,47 +7,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace Group_2_PacketWatch
 {
     public partial class UserPacketLogs : Form
     {
-        private string _loggedInUser;
-
-        public UserPacketLogs(string username)
+        public UserPacketLogs()
         {
             InitializeComponent();
-            _loggedInUser = username;
         }
 
         private void UserPacketLogs_Load(object sender, EventArgs e)
         {
             LoadPacketLogs();
+            ActivityLogger.Log("VIEW_PACKET_LOGS", "User viewed packet logs");
         }
 
-        private void LoadPacketLogs(string ipFilter = "", string generalFilter = "")
+        private void LoadPacketLogs(string ipFilter = "", string protocolFilter = "")
         {
-            dgvPacketLogs.Rows.Clear();
+            string sql = @"SELECT pl.log_id, p.timestamp, p.source_ip,
+                                  p.destination_ip, p.protocol, p.destination_port AS port
+                           FROM packet_logs pl
+                           JOIN packets p ON pl.packet_id = p.packet_id
+                           WHERE (@ip = '' OR p.source_ip LIKE @ipLike)
+                             AND (@proto = '' OR p.protocol = @proto)
+                           ORDER BY pl.logged_at DESC
+                           LIMIT 200";
 
-            // Sample data
-            var data = new string[,]
-            {
-                {"1", "2024-01-01 10:00:00", "192.168.1.1", "10.0.0.1",   "TCP",  "80"},
-                {"2", "2024-01-01 10:01:00", "192.168.1.2", "10.0.0.2",   "UDP",  "53"},
-                {"3", "2024-01-01 10:02:00", "192.168.1.3", "10.0.0.3",   "TCP",  "22"},
-                {"4", "2024-01-01 10:03:00", "10.0.0.50",   "192.168.1.1","ICMP", "0"},
-                {"5", "2024-01-01 10:04:00", "192.168.1.5", "8.8.8.8",    "UDP",  "443"}
-            };
+            DataTable dt = DBHelper.ExecuteQuery(sql,
+                new MySqlParameter("@ip", ipFilter),
+                new MySqlParameter("@ipLike", "%" + ipFilter + "%"),
+                new MySqlParameter("@proto", protocolFilter));
 
-            for (int i = 0; i < data.GetLength(0); i++)
-            {
-                string srcIP = data[i, 2];
-                if (!string.IsNullOrEmpty(ipFilter) &&
-                    !srcIP.Contains(ipFilter)) continue;
-                dgvPacketLogs.Rows.Add(
-                    data[i, 0], data[i, 1], data[i, 2],
-                    data[i, 3], data[i, 4], data[i, 5]);
-            }
+            dgvPacketLogs.AutoGenerateColumns = false;
+            dgvPacketLogs.DataSource = dt;
         }
 
         private void btnSearch_Click_1(object sender, EventArgs e)
@@ -60,32 +54,52 @@ namespace Group_2_PacketWatch
             txtSearchIP.Clear();
             txtFilter.Clear();
             LoadPacketLogs();
+            ActivityLogger.Log("REFRESH_PACKET_LOGS", "Refreshed packet logs");
         }
 
         private void btnNavDashboard_Click_1(object sender, EventArgs e)
         {
-            UserDashboard parent = new UserDashboard(_loggedInUser);
+            UserDashboard parent = new UserDashboard();
             parent.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void btnNavPacketLogs_Click_1(object sender, EventArgs e)
         {
             LoadPacketLogs();
         }
-
         private void btnNavAlerts_Click_1(object sender, EventArgs e)
         {
-            UserSuspiciousAlerts alerts = new UserSuspiciousAlerts(_loggedInUser);
-            alerts.Show();
-            this.Close();
+            UserSuspiciousAlerts child = new UserSuspiciousAlerts();
+            child.Show();
+            this.Hide();
         }
 
         private void btnLogout_Click_1(object sender, EventArgs e)
         {
+            PacketCaptureEngine.StopCapture();
+            ActivityLogger.Log("LOGOUT", $"User '{Session.Username}' logged out");
+            Session.Clear();
             LoginForm login = new LoginForm();
             login.Show();
-            this.Close();
+            this.Hide();
+        }
+
+        private void btnNavActivityLog_Click(object sender, EventArgs e)
+        {
+            ActivityLogger.Log("NAVIGATE", "Navigated to Activity Log");
+            UserActivityLog child = new UserActivityLog();
+            child.Show();
+            this.Hide();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            PacketCaptureEngine.StopCapture();
+            DBHelper.ClearPacketData();
+            base.OnFormClosed(e);
+            if (Application.OpenForms.Count == 0)
+                Application.Exit();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Group_2_PacketWatch
+﻿using System;
+
+namespace Group_2_PacketWatch
 {
     partial class LoginForm
     {
@@ -170,7 +172,6 @@
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PacketWatch - Login";
-            this.Load += new System.EventHandler(this.LoginForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

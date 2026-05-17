@@ -7,50 +7,68 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace Group_2_PacketWatch
 {
     public partial class UserDashboard : Form
     {
-        private string _loggedInUser;
+        private Timer _refreshTimer;
 
-        public UserDashboard(string username)
+        public UserDashboard()
         {
             InitializeComponent();
-            _loggedInUser = username;
         }
 
         private void UserDashboard_Load(object sender, EventArgs e)
         {
             LoadDashboardData();
+
+            _refreshTimer = new Timer();
+            _refreshTimer.Interval = 3000;
+            _refreshTimer.Tick += (s, ev) => LoadDashboardData();
+            _refreshTimer.Start();
+
+            ActivityLogger.Log("VIEW_DASHBOARD", "User opened the dashboard");
         }
+
         private void LoadDashboardData()
         {
-            // Sample data
-            dgvDashboard.Rows.Clear();
-            dgvDashboard.Rows.Add("2024-01-01 10:00:00", "192.168.1.1", "10.0.0.1", "TCP", "80", "Normal");
-            dgvDashboard.Rows.Add("2024-01-01 10:01:00", "192.168.1.2", "10.0.0.2", "UDP", "53", "Normal");
-            dgvDashboard.Rows.Add("2024-01-01 10:02:00", "192.168.1.3", "10.0.0.3", "TCP", "22", "Suspicious");
-            dgvDashboard.Rows.Add("2024-01-01 10:03:00", "10.0.0.50", "192.168.1.1", "ICMP", "0", "Suspicious");
-            dgvDashboard.Rows.Add("2024-01-01 10:04:00", "192.168.1.5", "8.8.8.8", "UDP", "443", "Normal");
+            string sql = @"SELECT p.timestamp, p.source_ip, p.destination_ip,
+                                  p.protocol, p.destination_port AS port,
+                                  CASE WHEN a.alert_id IS NOT NULL THEN 'Suspicious' ELSE 'Normal' END AS status
+                           FROM packets p
+                           LEFT JOIN alerts a ON a.packet_id = p.packet_id
+                           ORDER BY p.timestamp DESC
+                           LIMIT 50";
 
-            lblTotalValue.Text = dgvDashboard.Rows.Count.ToString();
-            lblActiveUsersValue.Text = "1";
-            lblAlertsValue.Text = "2";
+            DataTable dt = DBHelper.ExecuteQuery(sql);
+            dgvDashboard.AutoGenerateColumns = false;
+            dgvDashboard.DataSource = dt;
+
+            object totalObj = DBHelper.ExecuteScalar("SELECT COUNT(*) FROM packets");
+            object alertObj = DBHelper.ExecuteScalar("SELECT COUNT(*) FROM alerts WHERE is_resolved = FALSE");
+            object userObj = DBHelper.ExecuteScalar("SELECT COUNT(*) FROM users WHERE is_active = TRUE");
+
+            lblTotalValue.Text = totalObj?.ToString() ?? "0";
+            lblAlertsValue.Text = alertObj?.ToString() ?? "0";
+            lblActiveUsersValue.Text = userObj?.ToString() ?? "0";
         }
 
-        private void btnNavPacketLogs_Click(object sender, EventArgs e)
+        private void btnToggleCapture_Click(object sender, EventArgs e)
         {
-            UserPacketLogs child = new UserPacketLogs(_loggedInUser);
-            child.Show();
-            this.Close();
-        }
-
-        private void btnNavAlerts_Click(object sender, EventArgs e)
-        {
-            UserSuspiciousAlerts child = new UserSuspiciousAlerts(_loggedInUser);
-            child.Show();
-            this.Close();
+            if (!PacketCaptureEngine.IsCapturing)
+            {
+                PacketCaptureEngine.StartCapture(2 + 3);
+                btnToggleCapture.Text = "Stop Capture";
+                ActivityLogger.Log("START_CAPTURE", "Started capturing on Realtek Wi-Fi adapter");
+            }
+            else
+            {
+                PacketCaptureEngine.StopCapture();
+                btnToggleCapture.Text = "Start Capture";
+                ActivityLogger.Log("STOP_CAPTURE", "Stopped packet capture");
+            }
         }
 
         private void btnNavDashboard_Click(object sender, EventArgs e)
@@ -63,15 +81,47 @@ namespace Group_2_PacketWatch
             LoadDashboardData();
         }
 
+        private void btnNavPacketLogs_Click(object sender, EventArgs e)
+        {
+            ActivityLogger.Log("NAVIGATE", "Navigated to Packet Logs");
+            UserPacketLogs child = new UserPacketLogs();
+            child.Show();
+            this.Hide();
+        }
+
+        private void btnNavAlerts_Click(object sender, EventArgs e)
+        {
+            ActivityLogger.Log("NAVIGATE", "Navigated to Suspicious Alerts");
+            UserSuspiciousAlerts child = new UserSuspiciousAlerts();
+            child.Show();
+            this.Hide();
+        }
+
+        private void btnNavActivityLog_Click(object sender, EventArgs e)
+        {
+            ActivityLogger.Log("NAVIGATE", "Navigated to Activity Log");
+            UserActivityLog child = new UserActivityLog();
+            child.Show();
+            this.Hide();
+        }
+
         private void btnLogout_Click(object sender, EventArgs e)
         {
+            PacketCaptureEngine.StopCapture();
+            _refreshTimer?.Stop();
+            DBHelper.ClearPacketData();
+            ActivityLogger.Log("LOGOUT", $"User '{Session.Username}' logged out");
+            Session.Clear();
             LoginForm login = new LoginForm();
             login.Show();
-            this.Close();
+            this.Hide();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
+            PacketCaptureEngine.StopCapture();
+            _refreshTimer?.Stop();
+            DBHelper.ClearPacketData();
             base.OnFormClosed(e);
             if (Application.OpenForms.Count == 0)
                 Application.Exit();

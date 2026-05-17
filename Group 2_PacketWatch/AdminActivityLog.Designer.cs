@@ -1,6 +1,6 @@
 ﻿namespace Group_2_PacketWatch
 {
-    partial class UserPacketLogs
+    partial class AdminActivityLog
     {
         /// <summary>
         /// Required designer variable.
@@ -33,6 +33,7 @@
             this.lblAppName = new System.Windows.Forms.Label();
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.btnNavActivityLog = new System.Windows.Forms.Button();
+            this.btnNavUserMgmt = new System.Windows.Forms.Button();
             this.btnNavDashboard = new System.Windows.Forms.Button();
             this.btnNavPacketLogs = new System.Windows.Forms.Button();
             this.btnNavAlerts = new System.Windows.Forms.Button();
@@ -41,19 +42,20 @@
             this.txtFilter = new System.Windows.Forms.TextBox();
             this.lblFilterBy = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
-            this.txtSearchIP = new System.Windows.Forms.TextBox();
+            this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.dgvPacketLogs = new System.Windows.Forms.DataGridView();
-            this.colLogID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTimestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSourceIP = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDestIP = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colProtocol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPort = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvActivityLog = new System.Windows.Forms.DataGridView();
+            this.colActivityID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDetails = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colIPAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colActivityAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colUsername = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnClearLog = new System.Windows.Forms.Button();
             this.pnlTitleBar.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.pnlSearch.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPacketLogs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvActivityLog)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlTitleBar
@@ -65,7 +67,7 @@
             this.pnlTitleBar.Location = new System.Drawing.Point(0, 0);
             this.pnlTitleBar.Name = "pnlTitleBar";
             this.pnlTitleBar.Size = new System.Drawing.Size(884, 45);
-            this.pnlTitleBar.TabIndex = 5;
+            this.pnlTitleBar.TabIndex = 8;
             // 
             // btnLogout
             // 
@@ -76,7 +78,7 @@
             this.btnLogout.TabIndex = 2;
             this.btnLogout.Text = "➦";
             this.btnLogout.UseVisualStyleBackColor = true;
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click_1);
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // lblAppName
             // 
@@ -84,14 +86,15 @@
             this.lblAppName.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAppName.Location = new System.Drawing.Point(3, 6);
             this.lblAppName.Name = "lblAppName";
-            this.lblAppName.Size = new System.Drawing.Size(294, 33);
+            this.lblAppName.Size = new System.Drawing.Size(316, 33);
             this.lblAppName.TabIndex = 1;
-            this.lblAppName.Text = "PacketWatch (User)";
+            this.lblAppName.Text = "PacketWatch (Admin)";
             // 
             // pnlHeader
             // 
             this.pnlHeader.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pnlHeader.Controls.Add(this.btnNavActivityLog);
+            this.pnlHeader.Controls.Add(this.btnNavUserMgmt);
             this.pnlHeader.Controls.Add(this.btnNavDashboard);
             this.pnlHeader.Controls.Add(this.btnNavPacketLogs);
             this.pnlHeader.Controls.Add(this.btnNavAlerts);
@@ -100,51 +103,62 @@
             this.pnlHeader.Location = new System.Drawing.Point(0, 45);
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(884, 40);
-            this.pnlHeader.TabIndex = 6;
+            this.pnlHeader.TabIndex = 9;
             // 
             // btnNavActivityLog
             // 
             this.btnNavActivityLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNavActivityLog.Location = new System.Drawing.Point(714, 6);
+            this.btnNavActivityLog.Location = new System.Drawing.Point(673, 7);
             this.btnNavActivityLog.Name = "btnNavActivityLog";
             this.btnNavActivityLog.Size = new System.Drawing.Size(35, 30);
-            this.btnNavActivityLog.TabIndex = 7;
+            this.btnNavActivityLog.TabIndex = 15;
             this.btnNavActivityLog.Text = "📋";
             this.btnNavActivityLog.UseVisualStyleBackColor = true;
             this.btnNavActivityLog.Click += new System.EventHandler(this.btnNavActivityLog_Click);
             // 
+            // btnNavUserMgmt
+            // 
+            this.btnNavUserMgmt.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNavUserMgmt.Location = new System.Drawing.Point(837, 7);
+            this.btnNavUserMgmt.Name = "btnNavUserMgmt";
+            this.btnNavUserMgmt.Size = new System.Drawing.Size(35, 30);
+            this.btnNavUserMgmt.TabIndex = 14;
+            this.btnNavUserMgmt.Text = "👤";
+            this.btnNavUserMgmt.UseVisualStyleBackColor = true;
+            this.btnNavUserMgmt.Click += new System.EventHandler(this.btnNavUserMgmt_Click);
+            // 
             // btnNavDashboard
             // 
             this.btnNavDashboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNavDashboard.Location = new System.Drawing.Point(755, 6);
+            this.btnNavDashboard.Location = new System.Drawing.Point(714, 7);
             this.btnNavDashboard.Name = "btnNavDashboard";
             this.btnNavDashboard.Size = new System.Drawing.Size(35, 30);
-            this.btnNavDashboard.TabIndex = 3;
+            this.btnNavDashboard.TabIndex = 11;
             this.btnNavDashboard.Text = "🖥️";
             this.btnNavDashboard.UseVisualStyleBackColor = true;
-            this.btnNavDashboard.Click += new System.EventHandler(this.btnNavDashboard_Click_1);
+            this.btnNavDashboard.Click += new System.EventHandler(this.btnNavDashboard_Click);
             // 
             // btnNavPacketLogs
             // 
             this.btnNavPacketLogs.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNavPacketLogs.Location = new System.Drawing.Point(796, 6);
+            this.btnNavPacketLogs.Location = new System.Drawing.Point(755, 7);
             this.btnNavPacketLogs.Name = "btnNavPacketLogs";
             this.btnNavPacketLogs.Size = new System.Drawing.Size(35, 30);
-            this.btnNavPacketLogs.TabIndex = 4;
+            this.btnNavPacketLogs.TabIndex = 12;
             this.btnNavPacketLogs.Text = "≡≡";
             this.btnNavPacketLogs.UseVisualStyleBackColor = true;
-            this.btnNavPacketLogs.Click += new System.EventHandler(this.btnNavPacketLogs_Click_1);
+            this.btnNavPacketLogs.Click += new System.EventHandler(this.btnNavPacketLogs_Click);
             // 
             // btnNavAlerts
             // 
             this.btnNavAlerts.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNavAlerts.Location = new System.Drawing.Point(837, 6);
+            this.btnNavAlerts.Location = new System.Drawing.Point(796, 7);
             this.btnNavAlerts.Name = "btnNavAlerts";
             this.btnNavAlerts.Size = new System.Drawing.Size(35, 30);
-            this.btnNavAlerts.TabIndex = 5;
+            this.btnNavAlerts.TabIndex = 13;
             this.btnNavAlerts.Text = "⚠";
             this.btnNavAlerts.UseVisualStyleBackColor = true;
-            this.btnNavAlerts.Click += new System.EventHandler(this.btnNavAlerts_Click_1);
+            this.btnNavAlerts.Click += new System.EventHandler(this.btnNavAlerts_Click);
             // 
             // lblPageTitle
             // 
@@ -152,22 +166,23 @@
             this.lblPageTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPageTitle.Location = new System.Drawing.Point(3, 3);
             this.lblPageTitle.Name = "lblPageTitle";
-            this.lblPageTitle.Size = new System.Drawing.Size(219, 33);
+            this.lblPageTitle.Size = new System.Drawing.Size(235, 33);
             this.lblPageTitle.TabIndex = 2;
-            this.lblPageTitle.Text = "PACKET LOGS";
+            this.lblPageTitle.Text = "ACTIVITY LOGS";
             // 
             // pnlSearch
             // 
+            this.pnlSearch.Controls.Add(this.btnClearLog);
             this.pnlSearch.Controls.Add(this.txtFilter);
             this.pnlSearch.Controls.Add(this.lblFilterBy);
             this.pnlSearch.Controls.Add(this.btnSearch);
-            this.pnlSearch.Controls.Add(this.txtSearchIP);
+            this.pnlSearch.Controls.Add(this.txtSearch);
             this.pnlSearch.Controls.Add(this.btnRefresh);
             this.pnlSearch.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlSearch.Location = new System.Drawing.Point(0, 85);
             this.pnlSearch.Name = "pnlSearch";
             this.pnlSearch.Size = new System.Drawing.Size(884, 40);
-            this.pnlSearch.TabIndex = 7;
+            this.pnlSearch.TabIndex = 10;
             // 
             // txtFilter
             // 
@@ -193,14 +208,14 @@
             this.btnSearch.TabIndex = 8;
             this.btnSearch.Text = "🔍";
             this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click_1);
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
-            // txtSearchIP
+            // txtSearch
             // 
-            this.txtSearchIP.Location = new System.Drawing.Point(12, 10);
-            this.txtSearchIP.Name = "txtSearchIP";
-            this.txtSearchIP.Size = new System.Drawing.Size(315, 20);
-            this.txtSearchIP.TabIndex = 7;
+            this.txtSearch.Location = new System.Drawing.Point(12, 10);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(315, 20);
+            this.txtSearch.TabIndex = 7;
             // 
             // btnRefresh
             // 
@@ -210,91 +225,100 @@
             this.btnRefresh.TabIndex = 6;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click_1);
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
-            // dgvPacketLogs
+            // dgvActivityLog
             // 
-            this.dgvPacketLogs.AllowUserToAddRows = false;
-            this.dgvPacketLogs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvPacketLogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPacketLogs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colLogID,
-            this.colTimestamp,
-            this.colSourceIP,
-            this.colDestIP,
-            this.colProtocol,
-            this.colPort});
-            this.dgvPacketLogs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvPacketLogs.Location = new System.Drawing.Point(0, 125);
-            this.dgvPacketLogs.Name = "dgvPacketLogs";
-            this.dgvPacketLogs.ReadOnly = true;
-            this.dgvPacketLogs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPacketLogs.Size = new System.Drawing.Size(884, 436);
-            this.dgvPacketLogs.TabIndex = 8;
+            this.dgvActivityLog.AllowUserToAddRows = false;
+            this.dgvActivityLog.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvActivityLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvActivityLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colActivityID,
+            this.colAction,
+            this.colDetails,
+            this.colIPAddress,
+            this.colActivityAt,
+            this.colUsername});
+            this.dgvActivityLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvActivityLog.Location = new System.Drawing.Point(0, 125);
+            this.dgvActivityLog.Name = "dgvActivityLog";
+            this.dgvActivityLog.ReadOnly = true;
+            this.dgvActivityLog.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvActivityLog.Size = new System.Drawing.Size(884, 436);
+            this.dgvActivityLog.TabIndex = 11;
             // 
-            // colLogID
+            // colActivityID
             // 
-            this.colLogID.DataPropertyName = "log_id";
-            this.colLogID.HeaderText = "Log ID";
-            this.colLogID.Name = "colLogID";
-            this.colLogID.ReadOnly = true;
+            this.colActivityID.DataPropertyName = "activity_id";
+            this.colActivityID.HeaderText = "Activity ID";
+            this.colActivityID.Name = "colActivityID";
+            this.colActivityID.ReadOnly = true;
             // 
-            // colTimestamp
+            // colAction
             // 
-            this.colTimestamp.DataPropertyName = "timestamp";
-            this.colTimestamp.HeaderText = "Timestamp";
-            this.colTimestamp.Name = "colTimestamp";
-            this.colTimestamp.ReadOnly = true;
+            this.colAction.DataPropertyName = "action";
+            this.colAction.HeaderText = "Action";
+            this.colAction.Name = "colAction";
+            this.colAction.ReadOnly = true;
             // 
-            // colSourceIP
+            // colDetails
             // 
-            this.colSourceIP.DataPropertyName = "source_ip";
-            this.colSourceIP.HeaderText = "Source IP";
-            this.colSourceIP.Name = "colSourceIP";
-            this.colSourceIP.ReadOnly = true;
+            this.colDetails.DataPropertyName = "details";
+            this.colDetails.HeaderText = "Details";
+            this.colDetails.Name = "colDetails";
+            this.colDetails.ReadOnly = true;
             // 
-            // colDestIP
+            // colIPAddress
             // 
-            this.colDestIP.DataPropertyName = "destination_ip";
-            this.colDestIP.HeaderText = "Destination IP";
-            this.colDestIP.Name = "colDestIP";
-            this.colDestIP.ReadOnly = true;
+            this.colIPAddress.DataPropertyName = "ip_address";
+            this.colIPAddress.HeaderText = "IP Address";
+            this.colIPAddress.Name = "colIPAddress";
+            this.colIPAddress.ReadOnly = true;
             // 
-            // colProtocol
+            // colActivityAt
             // 
-            this.colProtocol.DataPropertyName = "protocol";
-            this.colProtocol.HeaderText = "Protocol";
-            this.colProtocol.Name = "colProtocol";
-            this.colProtocol.ReadOnly = true;
+            this.colActivityAt.DataPropertyName = "activity_at";
+            this.colActivityAt.HeaderText = "Date/Time";
+            this.colActivityAt.Name = "colActivityAt";
+            this.colActivityAt.ReadOnly = true;
             // 
-            // colPort
+            // colUsername
             // 
-            this.colPort.DataPropertyName = "port";
-            this.colPort.HeaderText = "Port";
-            this.colPort.Name = "colPort";
-            this.colPort.ReadOnly = true;
+            this.colUsername.DataPropertyName = "username";
+            this.colUsername.HeaderText = "Username";
+            this.colUsername.Name = "colUsername";
+            this.colUsername.ReadOnly = true;
             // 
-            // UserPacketLogs
+            // btnClearLog
+            // 
+            this.btnClearLog.Location = new System.Drawing.Point(716, 8);
+            this.btnClearLog.Name = "btnClearLog";
+            this.btnClearLog.Size = new System.Drawing.Size(75, 23);
+            this.btnClearLog.TabIndex = 12;
+            this.btnClearLog.Text = "Clear Logs";
+            this.btnClearLog.UseVisualStyleBackColor = true;
+            this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
+            // 
+            // AdminActivityLog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.ClientSize = new System.Drawing.Size(884, 561);
-            this.Controls.Add(this.dgvPacketLogs);
+            this.Controls.Add(this.dgvActivityLog);
             this.Controls.Add(this.pnlSearch);
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.pnlTitleBar);
-            this.Name = "UserPacketLogs";
+            this.Name = "AdminActivityLog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PacketWatch - User Packet Logs";
-            this.Load += new System.EventHandler(this.UserPacketLogs_Load);
+            this.Text = " PacketWatch - Admin Activity Log";
             this.pnlTitleBar.ResumeLayout(false);
             this.pnlTitleBar.PerformLayout();
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();
             this.pnlSearch.ResumeLayout(false);
             this.pnlSearch.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPacketLogs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvActivityLog)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -305,23 +329,25 @@
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Label lblAppName;
         private System.Windows.Forms.Panel pnlHeader;
+        private System.Windows.Forms.Label lblPageTitle;
+        private System.Windows.Forms.Panel pnlSearch;
+        private System.Windows.Forms.TextBox txtFilter;
+        private System.Windows.Forms.Label lblFilterBy;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.DataGridView dgvActivityLog;
+        private System.Windows.Forms.Button btnNavActivityLog;
+        private System.Windows.Forms.Button btnNavUserMgmt;
         private System.Windows.Forms.Button btnNavDashboard;
         private System.Windows.Forms.Button btnNavPacketLogs;
         private System.Windows.Forms.Button btnNavAlerts;
-        private System.Windows.Forms.Label lblPageTitle;
-        private System.Windows.Forms.Panel pnlSearch;
-        private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.TextBox txtSearchIP;
-        private System.Windows.Forms.TextBox txtFilter;
-        private System.Windows.Forms.Label lblFilterBy;
-        private System.Windows.Forms.DataGridView dgvPacketLogs;
-        private System.Windows.Forms.Button btnNavActivityLog;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colLogID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colTimestamp;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colSourceIP;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDestIP;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colProtocol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPort;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colActivityID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDetails;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colIPAddress;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colActivityAt;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUsername;
+        private System.Windows.Forms.Button btnClearLog;
     }
 }

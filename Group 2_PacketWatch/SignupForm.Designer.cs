@@ -1,4 +1,7 @@
-﻿namespace Group_2_PacketWatch
+﻿using System;
+using System.Windows.Forms;
+
+namespace Group_2_PacketWatch
 {
     partial class SignupForm
     {

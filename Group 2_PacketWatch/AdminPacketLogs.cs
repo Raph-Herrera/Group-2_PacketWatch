@@ -7,62 +7,61 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace Group_2_PacketWatch
 {
     public partial class AdminPacketLogs : Form
     {
-        private string _loggedInUser;
-
-        public AdminPacketLogs(string username)
+        public AdminPacketLogs()
         {
             InitializeComponent();
-            _loggedInUser = username;
         }
+
         private void AdminPacketLogs_Load(object sender, EventArgs e)
         {
             LoadPacketLogs();
+            ActivityLogger.Log("VIEW_PACKET_LOGS", "Admin viewed packet logs");
         }
 
-        private void LoadPacketLogs(string ipFilter = "")
+        private void LoadPacketLogs(string ipFilter = "", string protocolFilter = "")
         {
-            dgvPacketLogs.Rows.Clear();
+            string sql = @"SELECT pl.log_id, p.timestamp, p.source_ip,
+                                  p.destination_ip, p.protocol, p.destination_port AS port
+                           FROM packet_logs pl
+                           JOIN packets p ON pl.packet_id = p.packet_id
+                           WHERE (@ip = '' OR p.source_ip LIKE @ipLike)
+                             AND (@proto = '' OR p.protocol = @proto)
+                           ORDER BY pl.logged_at DESC
+                           LIMIT 200";
 
-            var data = new string[,]
-            {
-                // sample data
-                {"1", "2024-01-01 10:00:00", "192.168.1.1", "10.0.0.1",    "TCP",  "80"},
-                {"2", "2024-01-01 10:01:00", "192.168.1.2", "10.0.0.2",    "UDP",  "53"},
-                {"3", "2024-01-01 10:02:00", "192.168.1.3", "10.0.0.3",    "TCP",  "22"},
-                {"4", "2024-01-01 10:03:00", "10.0.0.50",   "192.168.1.1", "ICMP", "0"},
-                {"5", "2024-01-01 10:04:00", "192.168.1.5", "8.8.8.8",     "UDP",  "443"}
-            };
+            DataTable dt = DBHelper.ExecuteQuery(sql,
+                new MySqlParameter("@ip", ipFilter),
+                new MySqlParameter("@ipLike", "%" + ipFilter + "%"),
+                new MySqlParameter("@proto", protocolFilter));
 
-            for (int i = 0; i < data.GetLength(0); i++)
-            {
-                if (!string.IsNullOrEmpty(ipFilter) && !data[i, 2].Contains(ipFilter)) continue;
-                dgvPacketLogs.Rows.Add(data[i, 0], data[i, 1], data[i, 2], data[i, 3], data[i, 4], data[i, 5]);
-            }
+            dgvPacketLogs.AutoGenerateColumns = false;
+            dgvPacketLogs.DataSource = dt;
         }
+
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            LoadPacketLogs(txtSearchIP.Text.Trim());
+            LoadPacketLogs(txtSearchIP.Text.Trim(), txtFilter.Text.Trim());
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            txtSearchIP.Clear();
-            txtFilter.Clear();
+            txtSearchIP.Clear(); txtFilter.Clear();
             LoadPacketLogs();
+            ActivityLogger.Log("REFRESH_PACKET_LOGS", "Admin refreshed packet logs");
         }
 
         private void btnNavDashboard_Click(object sender, EventArgs e)
         {
-            AdminDashboard parent = new AdminDashboard(_loggedInUser);
+            AdminDashboard parent = new AdminDashboard();
             parent.Show();
-            this.Close();
+            this.Hide();
         }
-
         private void btnNavPacketLogs_Click(object sender, EventArgs e)
         {
             LoadPacketLogs();
@@ -70,23 +69,42 @@ namespace Group_2_PacketWatch
 
         private void btnNavAlerts_Click(object sender, EventArgs e)
         {
-            AdminSuspiciousAlerts child = new AdminSuspiciousAlerts(_loggedInUser);
+            AdminSuspiciousAlerts child = new AdminSuspiciousAlerts();
             child.Show();
-            this.Close();
-        }
-
-        private void btnLogout_Click(object sender, EventArgs e)
-        {
-            LoginForm login = new LoginForm();
-            login.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void btnNavUserMgmt_Click(object sender, EventArgs e)
         {
-            AdminUserManagement child = new AdminUserManagement(_loggedInUser);
+            AdminUserManagement child = new AdminUserManagement();
             child.Show();
-            this.Close();
+            this.Hide();
+        }
+
+        private void btnNavActivityLog_Click(object sender, EventArgs e)
+        {
+            AdminActivityLog child = new AdminActivityLog();
+            child.Show();
+            this.Hide();
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            PacketCaptureEngine.StopCapture();
+            ActivityLogger.Log("LOGOUT", $"Admin '{Session.Username}' logged out");
+            Session.Clear();
+            LoginForm login = new LoginForm();
+            login.Show();
+            this.Hide();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            PacketCaptureEngine.StopCapture();
+            DBHelper.ClearPacketData();
+            base.OnFormClosed(e);
+            if (Application.OpenForms.Count == 0)
+                Application.Exit();
         }
     }
 }

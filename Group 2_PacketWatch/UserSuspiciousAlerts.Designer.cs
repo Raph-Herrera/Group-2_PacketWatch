@@ -32,6 +32,7 @@
             this.btnLogout = new System.Windows.Forms.Button();
             this.lblAppName = new System.Windows.Forms.Label();
             this.pnlHeader = new System.Windows.Forms.Panel();
+            this.btnNavActivityLog = new System.Windows.Forms.Button();
             this.btnNavDashboard = new System.Windows.Forms.Button();
             this.btnNavPacketLogs = new System.Windows.Forms.Button();
             this.btnNavAlerts = new System.Windows.Forms.Button();
@@ -89,6 +90,7 @@
             // pnlHeader
             // 
             this.pnlHeader.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.pnlHeader.Controls.Add(this.btnNavActivityLog);
             this.pnlHeader.Controls.Add(this.btnNavDashboard);
             this.pnlHeader.Controls.Add(this.btnNavPacketLogs);
             this.pnlHeader.Controls.Add(this.btnNavAlerts);
@@ -98,6 +100,17 @@
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(884, 40);
             this.pnlHeader.TabIndex = 7;
+            // 
+            // btnNavActivityLog
+            // 
+            this.btnNavActivityLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNavActivityLog.Location = new System.Drawing.Point(714, 6);
+            this.btnNavActivityLog.Name = "btnNavActivityLog";
+            this.btnNavActivityLog.Size = new System.Drawing.Size(35, 30);
+            this.btnNavActivityLog.TabIndex = 7;
+            this.btnNavActivityLog.Text = "📋";
+            this.btnNavActivityLog.UseVisualStyleBackColor = true;
+            this.btnNavActivityLog.Click += new System.EventHandler(this.btnNavActivityLog_Click);
             // 
             // btnNavDashboard
             // 
@@ -219,30 +232,35 @@
             // 
             // colAlertID
             // 
+            this.colAlertID.DataPropertyName = "alert_id";
             this.colAlertID.HeaderText = "Alert ID";
             this.colAlertID.Name = "colAlertID";
             this.colAlertID.ReadOnly = true;
             // 
             // colReason
             // 
+            this.colReason.DataPropertyName = "reason";
             this.colReason.HeaderText = "Reason";
             this.colReason.Name = "colReason";
             this.colReason.ReadOnly = true;
             // 
             // colSourceIP
             // 
+            this.colSourceIP.DataPropertyName = "source_ip";
             this.colSourceIP.HeaderText = "Source IP";
             this.colSourceIP.Name = "colSourceIP";
             this.colSourceIP.ReadOnly = true;
             // 
             // colDestIP
             // 
+            this.colDestIP.DataPropertyName = "destination_ip";
             this.colDestIP.HeaderText = "Destination IP";
             this.colDestIP.Name = "colDestIP";
             this.colDestIP.ReadOnly = true;
             // 
             // colSeverity
             // 
+            this.colSeverity.DataPropertyName = "severity";
             this.colSeverity.HeaderText = "Severity";
             this.colSeverity.Name = "colSeverity";
             this.colSeverity.ReadOnly = true;
@@ -289,6 +307,7 @@
         private System.Windows.Forms.TextBox txtSearchIP;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.DataGridView dgvAlerts;
+        private System.Windows.Forms.Button btnNavActivityLog;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAlertID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colReason;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSourceIP;

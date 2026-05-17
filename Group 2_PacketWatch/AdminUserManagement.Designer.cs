@@ -32,6 +32,7 @@
             this.btnLogout = new System.Windows.Forms.Button();
             this.lblAppName = new System.Windows.Forms.Label();
             this.pnlHeader = new System.Windows.Forms.Panel();
+            this.btnNavActivityLog = new System.Windows.Forms.Button();
             this.btnNavUserMgmt = new System.Windows.Forms.Button();
             this.btnNavDashboard = new System.Windows.Forms.Button();
             this.btnNavPacketLogs = new System.Windows.Forms.Button();
@@ -41,9 +42,11 @@
             this.txtFilter = new System.Windows.Forms.TextBox();
             this.lblFilterBy = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
-            this.txtSearchIP = new System.Windows.Forms.TextBox();
+            this.txtSearchUsername = new System.Windows.Forms.TextBox();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.dgvUsers = new System.Windows.Forms.DataGridView();
+            this.pnlBottom = new System.Windows.Forms.Panel();
+            this.btnDeleteUser = new System.Windows.Forms.Button();
             this.colUserID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colUsername = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -53,6 +56,7 @@
             this.pnlHeader.SuspendLayout();
             this.pnlSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsers)).BeginInit();
+            this.pnlBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlTitleBar
@@ -90,6 +94,7 @@
             // pnlHeader
             // 
             this.pnlHeader.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.pnlHeader.Controls.Add(this.btnNavActivityLog);
             this.pnlHeader.Controls.Add(this.btnNavUserMgmt);
             this.pnlHeader.Controls.Add(this.btnNavDashboard);
             this.pnlHeader.Controls.Add(this.btnNavPacketLogs);
@@ -100,6 +105,17 @@
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(884, 40);
             this.pnlHeader.TabIndex = 9;
+            // 
+            // btnNavActivityLog
+            // 
+            this.btnNavActivityLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNavActivityLog.Location = new System.Drawing.Point(673, 6);
+            this.btnNavActivityLog.Name = "btnNavActivityLog";
+            this.btnNavActivityLog.Size = new System.Drawing.Size(35, 30);
+            this.btnNavActivityLog.TabIndex = 10;
+            this.btnNavActivityLog.Text = "📋";
+            this.btnNavActivityLog.UseVisualStyleBackColor = true;
+            this.btnNavActivityLog.Click += new System.EventHandler(this.btnNavActivityLog_Click);
             // 
             // btnNavUserMgmt
             // 
@@ -160,7 +176,7 @@
             this.pnlSearch.Controls.Add(this.txtFilter);
             this.pnlSearch.Controls.Add(this.lblFilterBy);
             this.pnlSearch.Controls.Add(this.btnSearch);
-            this.pnlSearch.Controls.Add(this.txtSearchIP);
+            this.pnlSearch.Controls.Add(this.txtSearchUsername);
             this.pnlSearch.Controls.Add(this.btnRefresh);
             this.pnlSearch.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlSearch.Location = new System.Drawing.Point(0, 85);
@@ -194,12 +210,12 @@
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
-            // txtSearchIP
+            // txtSearchUsername
             // 
-            this.txtSearchIP.Location = new System.Drawing.Point(12, 10);
-            this.txtSearchIP.Name = "txtSearchIP";
-            this.txtSearchIP.Size = new System.Drawing.Size(315, 20);
-            this.txtSearchIP.TabIndex = 7;
+            this.txtSearchUsername.Location = new System.Drawing.Point(12, 10);
+            this.txtSearchUsername.Name = "txtSearchUsername";
+            this.txtSearchUsername.Size = new System.Drawing.Size(315, 20);
+            this.txtSearchUsername.TabIndex = 7;
             // 
             // btnRefresh
             // 
@@ -230,32 +246,56 @@
             this.dgvUsers.Size = new System.Drawing.Size(884, 436);
             this.dgvUsers.TabIndex = 11;
             // 
+            // pnlBottom
+            // 
+            this.pnlBottom.Controls.Add(this.btnDeleteUser);
+            this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlBottom.Location = new System.Drawing.Point(0, 516);
+            this.pnlBottom.Name = "pnlBottom";
+            this.pnlBottom.Size = new System.Drawing.Size(884, 45);
+            this.pnlBottom.TabIndex = 12;
+            // 
+            // btnDeleteUser
+            // 
+            this.btnDeleteUser.Location = new System.Drawing.Point(733, 10);
+            this.btnDeleteUser.Name = "btnDeleteUser";
+            this.btnDeleteUser.Size = new System.Drawing.Size(139, 23);
+            this.btnDeleteUser.TabIndex = 7;
+            this.btnDeleteUser.Text = "Delete Selected Account";
+            this.btnDeleteUser.UseVisualStyleBackColor = true;
+            this.btnDeleteUser.Click += new System.EventHandler(this.btnDeleteUser_Click);
+            // 
             // colUserID
             // 
+            this.colUserID.DataPropertyName = "user_id";
             this.colUserID.HeaderText = "User ID";
             this.colUserID.Name = "colUserID";
             this.colUserID.ReadOnly = true;
             // 
             // colName
             // 
+            this.colName.DataPropertyName = "name";
             this.colName.HeaderText = "Name";
             this.colName.Name = "colName";
             this.colName.ReadOnly = true;
             // 
             // colUsername
             // 
+            this.colUsername.DataPropertyName = "username";
             this.colUsername.HeaderText = "Username";
             this.colUsername.Name = "colUsername";
             this.colUsername.ReadOnly = true;
             // 
             // colStatus
             // 
+            this.colStatus.DataPropertyName = "status";
             this.colStatus.HeaderText = "Status";
             this.colStatus.Name = "colStatus";
             this.colStatus.ReadOnly = true;
             // 
             // colRole
             // 
+            this.colRole.DataPropertyName = "role";
             this.colRole.HeaderText = "Role";
             this.colRole.Name = "colRole";
             this.colRole.ReadOnly = true;
@@ -266,6 +306,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.ClientSize = new System.Drawing.Size(884, 561);
+            this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.dgvUsers);
             this.Controls.Add(this.pnlSearch);
             this.Controls.Add(this.pnlHeader);
@@ -281,6 +322,7 @@
             this.pnlSearch.ResumeLayout(false);
             this.pnlSearch.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsers)).EndInit();
+            this.pnlBottom.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -300,9 +342,12 @@
         private System.Windows.Forms.TextBox txtFilter;
         private System.Windows.Forms.Label lblFilterBy;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.TextBox txtSearchIP;
+        private System.Windows.Forms.TextBox txtSearchUsername;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.DataGridView dgvUsers;
+        private System.Windows.Forms.Panel pnlBottom;
+        private System.Windows.Forms.Button btnDeleteUser;
+        private System.Windows.Forms.Button btnNavActivityLog;
         private System.Windows.Forms.DataGridViewTextBoxColumn colUserID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colUsername;
